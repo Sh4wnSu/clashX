@@ -377,6 +377,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         AutoUpgardeManager.shared.setup()
         AutoUpgardeManager.shared.addChanelMenuItem(&experimentalMenu)
+        TunManager.addTunMenuItem(&experimentalMenu)
         updateExperimentalFeatureStatus()
     }
 
