@@ -79,6 +79,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         ConfigFileManager.copySampleConfigIfNeed()
 
         PFMoveToApplicationsFolderIfNecessary()
+        
+        
+//        while NSUserName() != "root" {
+//            
+//        }
 
         // claer not existed selected model
         removeUnExistProxyGroups()
@@ -292,6 +297,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let secret: String
         }
 
+        setHomePath(kConfigFolderPath.goStringBuffer())
         // setup ui config first
         if let htmlPath = Bundle.main.path(forResource: "index", ofType: "html", inDirectory: "dashboard") {
             let uiPath = URL(fileURLWithPath: htmlPath).deletingLastPathComponent().path

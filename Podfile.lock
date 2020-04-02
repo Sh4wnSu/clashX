@@ -35,7 +35,7 @@ DEPENDENCIES:
   - WebViewJavascriptBridge
 
 SPEC REPOS:
-  trunk:
+  https://cdn.cocoapods.org/:
     - Alamofire
     - AppCenter
     - CocoaLumberjack
@@ -44,11 +44,12 @@ SPEC REPOS:
     - LetsMove
     - RxCocoa
     - RxRelay
-    - RxSwift
     - Sparkle
     - Starscream
     - SwiftyJSON
     - WebViewJavascriptBridge
+  https://github.com/CocoaPods/Specs.git:
+    - RxSwift
 
 SPEC CHECKSUMS:
   Alamofire: df2f8f826963b08b9a870791ad48e07a10090b2e
@@ -67,4 +68,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 597459bd8bdb06b260fcdc9161d9216842d0b8b0
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.1

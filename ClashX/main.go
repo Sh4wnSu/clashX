@@ -122,6 +122,11 @@ func setUIPath(path *C.char) {
 	route.SetUIPath(C.GoString(path))
 }
 
+//export setHomePath
+func setHomePath(path *C.char){
+	constant.SetHomeDir(C.GoString(path))
+}
+
 //export clashUpdateConfig
 func clashUpdateConfig(path *C.char) *C.char {
 	cfg, err := executor.ParseWithPath(C.GoString(path))

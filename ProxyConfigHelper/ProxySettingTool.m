@@ -9,10 +9,8 @@
 #import "ProxySettingTool.h"
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <AppKit/AppKit.h>
+#import "PathUtils.h"
 
-#include <unistd.h>
-#include <sys/types.h>
-#include <pwd.h>
 
 @interface ProxySettingTool()
 @property (nonatomic, assign) AuthorizationRef authRef;
@@ -147,12 +145,12 @@
 
 + (NSString *)clearDnsCache {
     // killall -HUP mDNSResponder
-    return [self runCommand:@"/usr/bin/killall" args:@[@"-HUP", @"mDNSResponder"]];
+    return [PathUtils runCommand:@"/usr/bin/killall" args:@[@"-HUP", @"mDNSResponder"]];
 }
 
 + (NSString *)updateForwardingOptions {
     // sysctl -w net.inet.ip.forwarding=1
-    return [self runCommand:@"/usr/sbin/sysctl" args:@[@"-w", @"net.inet.ip.forwarding=1"]];
+    return [PathUtils runCommand:@"/usr/sbin/sysctl" args:@[@"-w", @"net.inet.ip.forwarding=1"]];
 }
 
 // MARK: - Private
@@ -161,47 +159,13 @@
     [self freeAuth];
 }
 
-+ (NSString *)runCommand:(NSString *)path args:(NSArray *)args {
-    NSTask *task = [[NSTask alloc] init];
-    [task setLaunchPath:path];
-    [task setArguments:args];
-    
-    NSPipe *pipe = [NSPipe pipe];
-    [task setStandardOutput: pipe];
-
-    NSFileHandle *file = [pipe fileHandleForReading];
-
-    [task launch];
-
-    NSData *data = [file readDataToEndOfFile];
-
-    return [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
-}
 
 
-+ (NSString *)getUserHomePath {
-    SCDynamicStoreRef store = SCDynamicStoreCreate(NULL, CFSTR("com.west2online.ClashX.ProxyConfigHelper"), NULL, NULL);
-    CFStringRef CopyCurrentConsoleUsername(SCDynamicStoreRef store);
-    CFStringRef result;
-    uid_t uid;
-    result = SCDynamicStoreCopyConsoleUser(store, &uid, NULL);
-    if ((result != NULL) && CFEqual(result, CFSTR("loginwindow"))) {
-        CFRelease(result);
-        result = NULL;
-        CFRelease(store);
-        return nil;
-    }
-    CFRelease(result);
-    result = NULL;
-    CFRelease(store);
-    char *dir = getpwuid(uid)->pw_dir;
-    NSString *path = [NSString stringWithUTF8String:dir];
-    return path;
-}
+
 
 
 - (NSArray<NSString *> *)getIgnoreList {
-    NSString *homePath = [ProxySettingTool getUserHomePath];
+    NSString *homePath = [PathUtils getUserHomePath];
     if (homePath.length > 0) {
         NSString *configPath = [homePath stringByAppendingString:@"/.config/clash/proxyIgnoreList.plist"];
         if ([NSFileManager.defaultManager fileExistsAtPath:configPath]) {
